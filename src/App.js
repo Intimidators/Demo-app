@@ -1,23 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import "./App.css";
 
 function App() {
+  const [imgFile, setImgFile] = useState(null);
+  const handleChange = (e) => {
+    console.log("file change");
+    const img = {
+      data: e.target.files[0],
+      preview: URL.createObjectURL(e.target.files[0]),
+    };
+    setImgFile(img);
+  };
+
+  const handleUpload = async () => {
+    let formData = new FormData();
+    formData.append("file", imgFile.data);
+    console.log("file uploading", formData);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Demo app</h1>
+      <div>
+        <input
+          accept="image/* video/*"
+          type="file"
+          onChangeCapture={(e) => handleChange(e)}
+        />
+      </div>
+      <div>
+        <img
+          src={imgFile?.preview}
+          style={{ height: "250px", width: "250px", objectFit: "contain" }}
+        />
+      </div>
+      <div>
+        <button onClick={handleUpload}>Upload</button>
+      </div>
     </div>
   );
 }
